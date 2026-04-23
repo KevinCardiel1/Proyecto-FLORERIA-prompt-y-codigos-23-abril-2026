@@ -1,7 +1,39 @@
-¡Hola! Qué excelente iniciativa. Implementar un CRUD utilizando una arquitectura orientada a agentes con Antigravity en Flutter es una forma avanzada y elegante de desacoplar la lógica de negocio de la interfaz.Como tu Creador de Software, he diseñado este plan de trabajo estructurado para que tus estudiantes no solo copien código, sino que entiendan la metodología de agentes.1. Configuración Inicial y EntornoEstructura de CarpetasPrimero, asegúrate de crear la jerarquía solicitada en tu terminal o explorador de archivos:Bashmkdir xflutterkevin0530
+¡Hola! Qué excelente iniciativa. Implementar un CRUD utilizando una arquitectura orientada a agentes con **Antigravity** en Flutter es una forma avanzada y elegante de desacoplar la lógica de negocio de la interfaz.
+
+Como tu **Creador de Software**, he diseñado este plan de trabajo estructurado para que tus estudiantes no solo copien código, sino que entiendan la metodología de agentes.
+
+---
+
+## 1. Configuración Inicial y Entorno
+
+### Estructura de Carpetas
+Primero, asegúrate de crear la jerarquía solicitada en tu terminal o explorador de archivos:
+
+```bash
+mkdir xflutterkevin0530
 cd xflutterkevin0530
 flutter create crudfloreria
-Configuración de Firebase (Consola)Ve a Firebase Console.Crea un proyecto llamado "FloreriaProject".En la sección Firestore Database, crea una base de datos en "Modo de prueba".Crea una colección llamada empleados e integra un documento de ejemplo con:nombre: Stringedad: Numberpuesto: String2. Integración de Librerías (pubspec.yaml)Para trabajar con Firebase y Antigravity, debemos modificar el archivo pubspec.yaml. Aquí es donde añadimos las herramientas de nuestro "taller".Nota: La indentación en este archivo es vital. Asegúrate de que dependencies esté al nivel correcto.YAMLdependencies:
+```
+
+### Configuración de Firebase (Consola)
+1. Ve a [Firebase Console](https://console.firebase.google.com/).
+2. Crea un proyecto llamado **"FloreriaProject"**.
+3. En la sección **Firestore Database**, crea una base de datos en "Modo de prueba".
+4. Crea una colección llamada `empleados` e integra un documento de ejemplo con:
+   * `nombre`: String
+   * `edad`: Number
+   * `puesto`: String
+
+---
+
+## 2. Integración de Librerías (`pubspec.yaml`)
+
+Para trabajar con Firebase y Antigravity, debemos modificar el archivo `pubspec.yaml`. Aquí es donde añadimos las herramientas de nuestro "taller".
+
+> **Nota:** La indentación en este archivo es vital. Asegúrate de que `dependencies` esté al nivel correcto.
+
+```yaml
+dependencies:
   flutter:
     sdk: flutter
   # Core de Firebase y Firestore
@@ -11,7 +43,29 @@ Configuración de Firebase (Consola)Ve a Firebase Console.Crea un proyecto llama
   antigravity: ^0.1.0 
   # Para un diseño más atractivo
   google_fonts: ^6.1.0
-Para instalar, ejecuta en la terminal:flutter pub get3. Metodología Paso a Paso: Agentes y SkillsEn Antigravity, dividimos la funcionalidad en entidades pensantes. Aquí tienes la definición para el proyecto:ComponenteDefiniciónResponsabilidad en el CRUDRoleEl "Perfil"AdminRole: Gestionar el personal de la florería.SkillLa "Habilidad"FirestoreSkill: Saber cómo hablar con Firebase (CRUD).AgentEl "Actor"EmpleadoAgent: El cerebro que recibe órdenes del UI y usa sus Skills.4. Estructura de Proyecto SugeridaPlaintextlib/
+```
+
+Para instalar, ejecuta en la terminal:
+`flutter pub get`
+
+---
+
+## 3. Metodología Paso a Paso: Agentes y Skills
+
+En **Antigravity**, dividimos la funcionalidad en entidades pensantes. Aquí tienes la definición para el proyecto:
+
+| Componente | Definición | Responsabilidad en el CRUD |
+| :--- | :--- | :--- |
+| **Role** | El "Perfil" | `AdminRole`: Gestionar el personal de la florería. |
+| **Skill** | La "Habilidad" | `FirestoreSkill`: Saber cómo hablar con Firebase (CRUD). |
+| **Agent** | El "Actor" | `EmpleadoAgent`: El cerebro que recibe órdenes del UI y usa sus Skills. |
+
+---
+
+## 4. Estructura de Proyecto Sugerida
+
+```text
+lib/
 ├── agents/          # Definición de agentes
 │   └── empleado_agent.dart
 ├── skills/          # Habilidades específicas (Firestore)
@@ -22,7 +76,15 @@ Para instalar, ejecuta en la terminal:flutter pub get3. Metodología Paso a Paso
 │   ├── home_screen.dart
 │   └── widgets/
 └── main.dart        # Punto de entrada
-5. Implementación del Código (Funcional)A. El Modelo de Datos (models/empleado_model.dart)Dartclass Empleado {
+```
+
+---
+
+## 5. Implementación del Código (Funcional)
+
+### A. El Modelo de Datos (`models/empleado_model.dart`)
+```dart
+class Empleado {
   String id;
   String nombre;
   int edad;
@@ -45,7 +107,13 @@ Para instalar, ejecuta en la terminal:flutter pub get3. Metodología Paso a Paso
     );
   }
 }
-B. El Skill de Firestore (skills/firestore_skill.dart)Este Skill contiene la lógica técnica de Firebase.Dartimport 'package:cloud_firestore/cloud_firestore.dart';
+```
+
+### B. El Skill de Firestore (`skills/firestore_skill.dart`)
+Este Skill contiene la lógica técnica de Firebase.
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/empleado_model.dart';
 
 class FirestoreSkill {
@@ -63,7 +131,13 @@ class FirestoreSkill {
 
   Future<void> deleteEmpleado(String id) => _db.collection('empleados').doc(id).delete();
 }
-C. El Agente de Empleados (agents/empleado_agent.dart)El agente coordina las acciones.Dartimport 'package:antigravity/antigravity.dart';
+```
+
+### C. El Agente de Empleados (`agents/empleado_agent.dart`)
+El agente coordina las acciones.
+
+```dart
+import 'package:antigravity/antigravity.dart';
 import '../skills/firestore_skill.dart';
 
 class EmpleadoAgent extends Agent {
@@ -72,7 +146,13 @@ class EmpleadoAgent extends Agent {
   // El agente expone las habilidades al UI
   FirestoreSkill get service => _skill;
 }
-D. Interfaz de Usuario Atractiva (ui/home_screen.dart)Utilizaremos colores Deep Purple y Amber para un look moderno de florería.Dartimport 'package:flutter/material.dart';
+```
+
+### D. Interfaz de Usuario Atractiva (`ui/home_screen.dart`)
+Utilizaremos colores **Deep Purple** y **Amber** para un look moderno de florería.
+
+```dart
+import 'package:flutter/material.dart';
 import '../agents/empleado_agent.dart';
 import '../models/empleado_model.dart';
 
@@ -161,7 +241,11 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-E. Main (main.dart)Dartimport 'package:flutter/material.dart';
+```
+
+### E. Main (`main.dart`)
+```dart
+import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'ui/home_screen.dart';
 
@@ -174,4 +258,14 @@ void main() async {
     home: HomeScreen(),
   ));
 }
-Flujo de Trabajo para los EstudiantesAnálisis: Identificar que el "Agente" es quien toma decisiones.Configuración: Conectar Flutter con Firebase Console (importante descargar el archivo JSON de configuración).Desarrollo: Implementar el Skill (lógica Firestore) antes que la UI.
+```
+
+---
+
+## Flujo de Trabajo para los Estudiantes
+1.  **Análisis:** Identificar que el "Agente" es quien toma decisiones.
+2.  **Configuración:** Conectar Flutter con Firebase Console (importante descargar el archivo JSON de configuración).
+3.  **Desarrollo:** Implementar el Skill (lógica Firestore) antes que la UI.
+4.  **Vinculación:** Usar el Agente para llamar a los métodos del Skill desde los botones del UI.
+
+¿Te gustaría que profundicemos en cómo validar los campos de texto antes de enviar los datos al Agente?
