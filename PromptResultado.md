@@ -1,35 +1,37 @@
-¡Hola! Qué buen reto. Me encanta el enfoque de Antigravity; es una forma muy estructurada de enseñar arquitectura de software a estudiantes porque separa las "capacidades" (Skills) de los "actores" (Agentes).
+¡Hola! Qué buen reto. Me encanta el enfoque de **Antigravity**; es una forma muy estructurada de enseñar arquitectura de software a estudiantes porque separa las "capacidades" (Skills) de los "actores" (Agentes). 
 
-Como tu Arquitecto de Software, aquí tienes el plan maestro para el proyecto crudfloreria. Vamos a construirlo paso a paso, con orden y mucho estilo.
+Como tu **Arquitecto de Software**, aquí tienes el plan maestro para el proyecto **crudfloreria**. Vamos a construirlo paso a paso, con orden y mucho estilo.
 
-1. Configuración del Entorno y Firebase
-Estructura de Directorios (Terminal)
+---
+
+## 1. Configuración del Entorno y Firebase
+
+### Estructura de Directorios (Terminal)
 Primero, asegúrate de estar en tu carpeta de trabajo. Ejecuta esto en tu terminal:
 
-Bash
+```bash
 mkdir xflutterKevin0530
 cd xflutterKevin0530
 flutter create crudfloreria
 cd crudfloreria
-Configuración en Firebase Console
-Crea un proyecto en Firebase Console.
+```
 
-Habilita Cloud Firestore.
+### Configuración en Firebase Console
+1.  Crea un proyecto en [Firebase Console](https://console.firebase.google.com/).
+2.  Habilita **Cloud Firestore**.
+3.  Crea una colección llamada **`empleados`**.
+4.  Agrega un documento de prueba con estos campos:
+    * `nombre` (string)
+    * `especialidad` (string)
+    * `salario` (number)
 
-Crea una colección llamada empleados.
+---
 
-Agrega un documento de prueba con estos campos:
+## 2. Dependencias y `pubspec.yaml`
 
-nombre (string)
+Para que Firebase y Antigravity funcionen, abre tu archivo `pubspec.yaml` y añade estas líneas bajo `dependencies`:
 
-especialidad (string)
-
-salario (number)
-
-2. Dependencias y pubspec.yaml
-Para que Firebase y Antigravity funcionen, abre tu archivo pubspec.yaml y añade estas líneas bajo dependencies:
-
-YAML
+```yaml
 dependencies:
   flutter:
     sdk: flutter
@@ -38,28 +40,36 @@ dependencies:
   cloud_firestore: ^4.15.8
   antigravity: ^0.1.0 # Arquitectura de agentes
   google_fonts: ^6.2.1
-Tip del experto: Ejecuta flutter pub get después de guardar. No olvides configurar los archivos google-services.json (Android) o GoogleService-Info.plist (iOS) que descargas de Firebase.
+```
 
-3. Metodología Antigravity: Agentes, Roles y Skills
+> **Tip del experto:** Ejecuta `flutter pub get` después de guardar. No olvides configurar los archivos `google-services.json` (Android) o `GoogleService-Info.plist` (iOS) que descargas de Firebase.
+
+---
+
+## 3. Metodología Antigravity: Agentes, Roles y Skills
+
 Para este CRUD de jardineros, aplicaremos esta jerarquía:
 
-Skill (Habilidad): El "saber hacer". Aquí reside la lógica de Firestore (escribir, borrar).
+* **Skill (Habilidad):** El "saber hacer". Aquí reside la lógica de Firestore (escribir, borrar).
+* **Role (Rol):** La "responsabilidad". Define qué puede hacer un actor (ej. Administrador de Personal).
+* **Agent (Agente):** El "actor" que ejecuta el flujo de trabajo.
 
-Role (Rol): La "responsabilidad". Define qué puede hacer un actor (ej. Administrador de Personal).
-
-Agent (Agente): El "actor" que ejecuta el flujo de trabajo.
-
-Estructura de Carpetas Sugerida
-Plaintext
+### Estructura de Carpetas Sugerida
+```text
 lib/
 ├── agents/          # Cerebro del proyecto
 ├── models/          # Estructura de datos (Jardinero)
 ├── skills/          # Lógica técnica (Firestore)
 ├── ui/              # Interfaz con colores atractivos
 └── main.dart        # Punto de arranque
-4. Implementación del Código (Funcional)
-A. El Modelo (models/jardinero.dart)
-Dart
+```
+
+---
+
+## 4. Implementación del Código (Funcional)
+
+### A. El Modelo (`models/jardinero.dart`)
+```dart
 class Jardinero {
   String id;
   String nombre;
@@ -83,10 +93,12 @@ class Jardinero {
     );
   }
 }
-B. El Skill de Firestore (skills/firestore_skill.dart)
+```
+
+### B. El Skill de Firestore (`skills/firestore_skill.dart`)
 Este es el "músculo" que habla con Firebase.
 
-Dart
+```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/jardinero.dart';
 
@@ -102,10 +114,12 @@ class FirestoreSkill {
   Future<void> update(Jardinero j) => _db.collection('empleados').doc(j.id).update(j.toMap());
   Future<void> delete(String id) => _db.collection('empleados').doc(id).delete();
 }
-C. El Agente (agents/jardinero_agent.dart)
+```
+
+### C. El Agente (`agents/jardinero_agent.dart`)
 El agente coordina las acciones para la UI.
 
-Dart
+```dart
 import 'package:antigravity/antigravity.dart';
 import '../skills/firestore_skill.dart';
 
@@ -115,10 +129,12 @@ class JardineroAgent extends Agent {
   
   // Aquí podrías añadir lógica de validación o roles específicos
 }
-D. Interfaz de Usuario (ui/home_page.dart)
+```
+
+### D. Interfaz de Usuario (`ui/home_page.dart`)
 Usaremos una paleta de verdes (bosque) y ámbar para un toque orgánico de florería.
 
-Dart
+```dart
 import 'package:flutter/material.dart';
 import '../agents/jardinero_agent.dart';
 import '../models/jardinero.dart';
@@ -204,8 +220,10 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-E. Punto de Entrada (main.dart)
-Dart
+```
+
+### E. Punto de Entrada (`main.dart`)
+```dart
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'ui/home_page.dart';
@@ -219,11 +237,14 @@ void main() async {
     home: HomePage(),
   ));
 }
-Metodología de Flujo de Trabajo (Practice Guide)
-Definición de Skills: Antes de tocar la pantalla, los estudiantes deben programar la habilidad (FirestoreSkill). Si la habilidad funciona, el resto es visual.
+```
 
-Inyección al Agente: El agente no "crea" datos, usa su "habilidad". Esto permite que si mañana cambias Firebase por otra base de datos, solo cambias la Skill, no el Agente.
+---
 
-UI Reactiva: Usamos StreamBuilder. Esto enseña a los alumnos que la base de datos es la "fuente de la verdad" y la UI solo reacciona a ella.
+## Metodología de Flujo de Trabajo (Practice Guide)
+
+1.  **Definición de Skills:** Antes de tocar la pantalla, los estudiantes deben programar la habilidad (`FirestoreSkill`). Si la habilidad funciona, el resto es visual.
+2.  **Inyección al Agente:** El agente no "crea" datos, usa su "habilidad". Esto permite que si mañana cambias Firebase por otra base de datos, solo cambias la Skill, no el Agente.
+3.  **UI Reactiva:** Usamos `StreamBuilder`. Esto enseña a los alumnos que la base de datos es la "fuente de la verdad" y la UI solo reacciona a ella.
 
 ¿Te gustaría que añadamos una función de búsqueda al Agente para filtrar jardineros por su especialidad?
